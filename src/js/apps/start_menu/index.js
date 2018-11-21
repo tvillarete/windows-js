@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Window } from '../toolbox';
+import { Drawer } from '../toolbox';
 
 
 class StartMenu extends Component {
@@ -18,9 +18,9 @@ class StartMenu extends Component {
       const { background } = desktopState;
 
       return (
-         <Window>
+         <Drawer height="500px" width="1000px">
             <h3>Start Menu</h3>
-         </Window>
+         </Drawer>
       );
    }
 }

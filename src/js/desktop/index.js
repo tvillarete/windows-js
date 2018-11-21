@@ -22,13 +22,20 @@ const AppContainer = styled.div`
 
 class Desktop extends Component {
    render() {
-      const { desktopState } = this.props;
+      const { desktopState, taskState } = this.props;
       const { background } = desktopState;
+      const { launched, minimized } = taskState;
 
       return (
          <Container background={background}>
             <AppContainer>
-               <apps.StartMenu />
+               {launched.map((id, index) => {
+                  const App = apps[id];
+                  return React.createElement(App, {
+                     key: `app-${id}`,
+                     minimized: minimized.includes(id)
+                  })
+               })}
             </AppContainer>
             <Taskbar />
          </Container>
@@ -38,6 +45,7 @@ class Desktop extends Component {
 
 const mapStateToProps = state => ({
    desktopState: state.desktopState,
+   taskState: state.taskState,
 });
 
 export default connect(mapStateToProps)(Desktop);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { launchApp, closeApp, minimizeApp } from '../../task_manager/actions';
 import * as apps from '../../apps';
 
 const Container = styled.div`
@@ -17,9 +18,24 @@ const IconButton = styled.div`
    align-items: center;
    width: 3em;
    transition: background 0.1s;
+   border-bottom: 2px solid transparent;
+
+   ${props =>
+      props.isActive &&
+      css`
+         background: rgb(50, 50, 50);
+         border-bottom: 2px solid dodgerblue;
+      `}
+
+   ${props =>
+      props.isMinimized &&
+      css`
+         background: transparent;
+      `}
 
    :hover {
-      background: rgb(50, 50, 50);
+      background: ${props =>
+         props.isMinimized ? 'rgb(30, 30, 30)' : 'rgb(50, 50, 50)'};
    }
 
    img {
@@ -29,16 +45,31 @@ const IconButton = styled.div`
 
 class Taskbar extends Component {
    render() {
-      const { taskbarState } = this.props;
+      const { taskbarState, taskState } = this.props;
       const { icons } = taskbarState;
+      const { launched, minimized } = taskState;
 
       return (
          <Container>
-            {icons.map((name, index) => (
-               <IconButton>
-                  <img src={`images/${apps[name].metadata.icon}`} />
-               </IconButton>
-            ))}
+            {icons.map((id, index) => {
+               const { metadata } = apps[id];
+               const { type } = metadata;
+               return (
+                  <IconButton
+                     isActive={launched.includes(id) && type !== 'toggle'}
+                     isMinimized={minimized.includes(id)}
+                     key={`tb-icon-${id}`}
+                     onClick={() =>
+                        launched.includes(id)
+                           ? type === 'toggle'
+                              ? this.props.closeApp(id)
+                              : this.props.minimizeApp(id)
+                           : this.props.launchApp(id)
+                     }>
+                     <img src={`images/${apps[id].metadata.icon}`} />
+                  </IconButton>
+               );
+            })}
          </Container>
       );
    }
@@ -46,7 +77,17 @@ class Taskbar extends Component {
 
 const mapStateToProps = state => ({
    desktopState: state.desktopState,
-   taskbarState: state.taskbarState
+   taskbarState: state.taskbarState,
+   taskState: state.taskState,
 });
 
-export default connect(mapStateToProps)(Taskbar);
+const mapDispatchToProps = dispatch => ({
+   launchApp: id => dispatch(launchApp(id)),
+   closeApp: id => dispatch(closeApp(id)),
+   minimizeApp: id => dispatch(minimizeApp(id)),
+});
+
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps,
+)(Taskbar);

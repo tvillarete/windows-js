@@ -1,6 +1,7 @@
 const initialState = {
    icons: [
-      'StartMenu'
+      'StartMenu',
+      'Explorer',
    ]
 }
 
