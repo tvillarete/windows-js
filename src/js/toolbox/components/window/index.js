@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components';
 
 const Container = styled.div`
    position: absolute;
+   display: flex;
+   flex-direction: column;
    height: 500px;
    width: 500px;
    background: white;
@@ -21,8 +23,6 @@ const Container = styled.div`
       }
    }
 `;
-
-const Contents = styled.div``;
 
 class Window extends Component {
    render() {

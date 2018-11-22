@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
-import { Window, Titlebar } from '../toolbox';
+import { Window, Titlebar } from '../../toolbox';
 import { minimizeApp, closeApp } from '../../task_manager/actions';
 
 class Explorer extends Component {

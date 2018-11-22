@@ -51,13 +51,13 @@ class Titlebar extends Component {
             <Contents>{this.props.children}</Contents>
             <Actions>
                <Button onClick={onMinimize}>
-                  <img src="/images/icons/minimize.svg" />
+                  <img alt="minimize" src="/images/icons/minimize.svg" />
                </Button>
                <Button onClick={onMaximize}>
-                  <img src="/images/icons/maximize.svg" />
+                  <img alt="maximize" src="/images/icons/maximize.svg" />
                </Button>
                <Button onClick={onClose} type="close">
-                  <img src="/images/icons/close.svg" />
+                  <img alt="close" src="/images/icons/close.svg" />
                </Button>
             </Actions>
          </Container>

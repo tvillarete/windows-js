@@ -66,7 +66,7 @@ class Taskbar extends Component {
                               : this.props.minimizeApp(id)
                            : this.props.launchApp(id)
                      }>
-                     <img src={`images/${apps[id].metadata.icon}`} />
+                     <img alt={metadata.name} src={`images/${apps[id].metadata.icon}`} />
                   </IconButton>
                );
             })}

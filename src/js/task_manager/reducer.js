@@ -1,5 +1,5 @@
 const initialState = {
-   launched: [],
+   launched: [ 'Settings' ],
    minimized: [],
 };
 

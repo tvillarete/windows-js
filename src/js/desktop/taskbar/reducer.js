@@ -1,8 +1,12 @@
 const initialState = {
    icons: [
       'StartMenu',
-      'Explorer',
-   ]
+      'Settings',
+   ],
+
+   config: {
+      accent: 'dodgerblue',
+   }
 }
 
 const taskbarReducer = (state = initialState, action) => {
