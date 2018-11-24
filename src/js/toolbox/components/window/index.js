@@ -5,11 +5,13 @@ const Container = styled.div`
    position: absolute;
    display: flex;
    flex-direction: column;
-   height: 500px;
-   width: 500px;
+   height: ${props => props.height}px;
+   width: ${props => props.width}px;
    background: white;
    transition: all 0.15s ease;
    animation: fadeIn 0.2s;
+   border: 1px solid dodgerblue;
+   box-shadow: 0 0 20px rgb(100,100,100);
 
    ${props => props.minimized && css`
       transform: translateY(100%);
@@ -26,14 +28,19 @@ const Container = styled.div`
 
 class Window extends Component {
    render() {
-      const { minimized } = this.props;
+      const { minimized, height, width } = this.props;
 
       return (
-         <Container minimized={minimized}>
+         <Container height={height} width={width} minimized={minimized}>
             {this.props.children}
          </Container>
       );
    }
+}
+
+Window.defaultProps = {
+   height: 700,
+   width: 1000,
 }
 
 export default Window;

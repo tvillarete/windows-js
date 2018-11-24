@@ -25,15 +25,17 @@ class Desktop extends Component {
       const { desktopState, taskState } = this.props;
       const { background } = desktopState;
       const { launched, minimized } = taskState;
+      console.log(launched);
 
       return (
          <Container background={background}>
             <AppContainer>
-               {launched.map((id, index) => {
-                  const App = apps[id];
+               {launched.map((app, index) => {
+                  console.log(app);
+                  const App = apps[app.id];
                   return React.createElement(App, {
-                     key: `app-${id}`,
-                     minimized: minimized.includes(id)
+                     key: `app-${app.id}-${app.instance}`,
+                     minimized: minimized.includes(app.id)
                   })
                })}
             </AppContainer>

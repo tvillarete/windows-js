@@ -1,6 +1,6 @@
 const initialState = {
    viewStack: [
-      'MainView'
+      'PersonalizationView'
    ],
 }
 

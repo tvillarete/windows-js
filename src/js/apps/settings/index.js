@@ -28,6 +28,8 @@ class Settings extends Component {
       return (
          <Window minimized={minimized}>
             <Titlebar
+               absolute
+               transparent
                onMinimize={() => this.props.minimizeApp('Settings')}
                onClose={() => {this.props.closeApp('Settings'); this.props.reset()}}
             />

@@ -1,16 +1,18 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import styled, { css } from "styled-components";
-import * as views from "../";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import styled, { css } from 'styled-components';
+import { reset } from '../../actions';
+import * as sections from './sections';
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+   display: flex;
+   flex: 1;
 `;
 
 const Sidebar = styled.div`
-  width: 15em;
+   width: 15em;
+   padding-top: 2.1em;
+   background-color: #e6e6e6;
 `;
 
 const Button = styled.div`
@@ -21,12 +23,14 @@ const Button = styled.div`
    border-left: 3px solid transparent;
 
    :hover {
-      background: rgb(230, 230, 230);
+      background: #d4d4d4;
    }
 
-   ${props => props.isActive && css`
-      border-left: 3px solid dodgerblue;
-   `}
+   ${props =>
+      props.isActive &&
+      css`
+         border-left: 3px solid dodgerblue;
+      `}
 `;
 
 const ButtonText = styled.h3`
@@ -35,43 +39,89 @@ const ButtonText = styled.h3`
 `;
 
 const ImgSprite = styled.div`
-  height: 30px;
-  width: 30px;
-  background: url(${props => props.src}) ${props => props.loc.x}px
-    ${props => props.loc.y}px no-repeat;
+   height: 30px;
+   width: 30px;
+   background: url(${props => props.src}) ${props => props.loc.x}px
+      ${props => props.loc.y}px no-repeat;
 `;
 
+const SectionContainer = styled.div`
+   flex: 1;
+   padding: 24px;
+   overflow: auto;
+`;
+
+const SectionTitle = styled.h2`
+   font-size: 1.8em;
+   font-weight: normal;
+`
+
 class PersonalizationView extends Component {
-  static get metadata() {
-    return {
-      name: "Personalization",
-      iconSpriteLocation: { x: 0, y: 124 }
-    };
-  }
+   static get metadata() {
+      return {
+         name: 'Personalization',
+         iconSpriteLocation: { x: 0, y: 124 },
+      };
+   }
 
-  state = {
-     activeSection: 'BackgroundSection'
-  }
+   state = {
+      activeSection: 'BackgroundSection',
+   };
 
-  render() {
-    const { desktopState } = this.props;
-    const { config } = desktopState;
+   showSection(id) {
+      this.setState({ activeSection: id });
+   }
 
-    return (
-      <Container>
-        <Sidebar>
-          <Button>
-            <ImgSprite src="images/icons/sidebar_sprites.svg" loc={{ x: 12, y: 7 }} />
-            <ButtonText>Home</ButtonText>
-          </Button>
-        </Sidebar>
-      </Container>
-    );
-  }
+   render() {
+      const { activeSection } = this.state;
+      const { desktopState } = this.props;
+      const { config } = desktopState;
+      const { names } = sections;
+      const Section = sections[this.state.activeSection];
+
+      return (
+         <Container>
+            <Sidebar color="#e6e6e6">
+               <Button onClick={this.props.reset}>
+                  <ImgSprite
+                     src="images/icons/sidebar_sprites.svg"
+                     loc={{ x: 11, y: 7 }}
+                  />
+                  <ButtonText>Home</ButtonText>
+               </Button>
+               {names.map((id, index) => {
+                  const { metadata } = sections[id];
+                  const { name, img, imgSpriteLoc } = metadata;
+
+                  return (
+                     <Button
+                        key={`sidebar-${id}`}
+                        isActive={activeSection === id}
+                        onClick={() => this.showSection(id)}>
+                        <ImgSprite src={img} loc={imgSpriteLoc} />
+                        <ButtonText>{name}</ButtonText>
+                     </Button>
+                  );
+               })}
+            </Sidebar>
+            <SectionContainer>
+               <SectionTitle>{sections[activeSection].metadata.name}</SectionTitle>
+               <Section />
+            </SectionContainer>
+         </Container>
+      );
+   }
 }
 
 const mapStateToProps = state => ({
-  desktopState: state.desktopState
+   desktopState: state.desktopState,
 });
 
-export default connect(mapStateToProps)(PersonalizationView);
+const mapDispatchToProps = dispatch => ({
+   reset: () => dispatch(reset()),
+});
+
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps,
+)(PersonalizationView);

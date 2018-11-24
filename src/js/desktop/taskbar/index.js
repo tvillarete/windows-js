@@ -5,6 +5,7 @@ import { launchApp, closeApp, minimizeApp } from '../../task_manager/actions';
 import * as apps from '../../apps';
 
 const Container = styled.div`
+   z-index: 1;
    display: flex;
    height: 3em;
    background: black;
@@ -39,7 +40,8 @@ const IconButton = styled.div`
    }
 
    img {
-      max-height: 40%;
+      height: 1.5em;
+      width: auto;
    }
 `;
 
@@ -54,11 +56,34 @@ class Taskbar extends Component {
             {icons.map((id, index) => {
                const { metadata } = apps[id];
                const { type } = metadata;
+               const isActive = launched.findIndex(app => id === app.id) > 0;
+
                return (
                   <IconButton
-                     isActive={launched.includes(id) && type !== 'toggle'}
+                     isActive={isActive && type !== 'toggle'}
                      isMinimized={minimized.includes(id)}
-                     key={`tb-icon-${id}`}
+                     key={`tb-icon-${id}-0`}
+                     onClick={() =>
+                        launched.includes(id)
+                           ? type === 'toggle'
+                              ? this.props.closeApp(id)
+                              : this.props.minimizeApp(id)
+                           : this.props.launchApp(id)
+                     }>
+                     <img alt={metadata.name} src={`images/${apps[id].metadata.icon}`} />
+                  </IconButton>
+               );
+            })}
+            {launched.map((app, index) => {
+               const { id } = app;
+               const { metadata } = apps[id];
+               const { type } = metadata;
+               if (icons.includes(id) || type === 'toggle') return null;
+               return (
+                  <IconButton
+                     isActive={launched.includes(id)}
+                     isMinimized={minimized.includes(id)}
+                     key={`tb-icon-${id}-${app.instance}`}
                      onClick={() =>
                         launched.includes(id)
                            ? type === 'toggle'

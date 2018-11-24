@@ -4,6 +4,12 @@ import styled, { css } from 'styled-components';
 const Container = styled.div`
    height: 2.1em;
    display: flex;
+
+   ${props => props.absolute && css`
+      position: absolute;
+      left: 0;
+      right: 0;
+   `}
 `;
 
 const Contents = styled.div`
@@ -44,10 +50,10 @@ const Button = styled.div`
 
 class Titlebar extends Component {
    render() {
-      const { onMinimize, onMaximize, onClose } = this.props;
+      const { onMinimize, onMaximize, onClose, absolute, transparent } = this.props;
 
       return (
-         <Container>
+         <Container absolute={absolute} transparent={transparent}>
             <Contents>{this.props.children}</Contents>
             <Actions>
                <Button onClick={onMinimize}>
@@ -69,6 +75,8 @@ Titlebar.defaultProps = {
    onMinimize: () => {},
    onMaximize: () => {},
    onClose: () => {},
+   absolute: false,
+   transparent: false,
 };
 
 export default Titlebar;

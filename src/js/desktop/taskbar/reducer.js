@@ -2,6 +2,7 @@ const initialState = {
    icons: [
       'StartMenu',
       'Settings',
+      'Explorer',
    ],
 
    config: {
