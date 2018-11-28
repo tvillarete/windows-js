@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const Container = styled.div`
 
@@ -16,9 +16,6 @@ class ColorSection extends Component {
   }
 
   render() {
-    const { desktopState } = this.props;
-    const { config } = desktopState;
-
     return (
       <Container>
          <h3>Colors</h3>

@@ -56,7 +56,12 @@ class Taskbar extends Component {
             {icons.map((id, index) => {
                const { metadata } = apps[id];
                const { type } = metadata;
-               const isActive = launched.findIndex(app => id === app.id) > 0;
+               let isActive = false;
+               for (let app of launched) {
+                  if (app.id === id) {
+                     isActive = true;
+                  }
+               }
 
                return (
                   <IconButton
@@ -64,7 +69,7 @@ class Taskbar extends Component {
                      isMinimized={minimized.includes(id)}
                      key={`tb-icon-${id}-0`}
                      onClick={() =>
-                        launched.includes(id)
+                        isActive
                            ? type === 'toggle'
                               ? this.props.closeApp(id)
                               : this.props.minimizeApp(id)

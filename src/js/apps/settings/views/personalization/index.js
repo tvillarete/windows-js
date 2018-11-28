@@ -74,8 +74,6 @@ class PersonalizationView extends Component {
 
    render() {
       const { activeSection } = this.state;
-      const { desktopState } = this.props;
-      const { config } = desktopState;
       const { names } = sections;
       const Section = sections[this.state.activeSection];
 

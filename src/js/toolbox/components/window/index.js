@@ -18,20 +18,31 @@ const Container = styled.div`
       opacity: 0;
    `}
 
+   ${props => props.closing && css`
+      animation: fadeOut 0.2s;
+   `};
+
    @keyframes fadeIn {
       0% {
          transform: scale(0.85);
          opacity: 0;
       }
    }
+
+   @keyframes fadeOut {
+      100% {
+         opacity: 0;
+         transform: scale(0.85);
+      }
+   }
 `;
 
 class Window extends Component {
    render() {
-      const { minimized, height, width } = this.props;
+      const { minimized, closing, height, width } = this.props;
 
       return (
-         <Container height={height} width={width} minimized={minimized}>
+         <Container height={height} width={width} closing={closing} minimized={minimized}>
             {this.props.children}
          </Container>
       );
@@ -40,7 +51,7 @@ class Window extends Component {
 
 Window.defaultProps = {
    height: 700,
-   width: 1000,
+   width: 700,
 }
 
 export default Window;

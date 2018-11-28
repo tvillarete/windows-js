@@ -4,6 +4,11 @@ const initialState = {
 
 const desktopReducer = (state = initialState, action) => {
    switch(action.type) {
+      case 'CHANGE_BACKGROUND':
+         return {
+            ...state,
+            background: action.background
+         }
       default:
          return state;
    }

@@ -1,0 +1,1 @@
+export const changeBackground = background => ({ type: 'CHANGE_BACKGROUND', background });

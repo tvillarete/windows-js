@@ -1,50 +1,90 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import styled, { css } from 'styled-components';
-import { Window, Titlebar } from '../../toolbox';
-import { minimizeApp, closeApp } from '../../task_manager/actions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import { Window, Titlebar } from "../../toolbox";
+import { minimizeApp, closeApp } from "../../task_manager/actions";
 
 const Container = styled.div`
-   flex: 1;
-   display: flex;
+  position: relative;
+  flex: 1;
+  display: flex;
+`;
+
+const Textarea = styled.textarea`
+  padding: 0 16px;
+  flex: 1;
+  outline: none;
+  border: none;
+  resize: none;
+  font-size: 13px;
+`;
+
+const Title = styled.h3`
+  margin: 0;
+  font-size: 13px;
+`;
+
+const Icon = styled.img`
+   height: 1em;
+   width: 1em;
+   margin-right: 4px;
 `;
 
 class Notepad extends Component {
-   static get metadata() {
-      return {
-         name: 'Notepad',
-         icon: 'explorer.png',
-         type: 'window',
-      };
-   }
+  static get metadata() {
+    return {
+      name: "Notepad",
+      icon: "Notepad.png",
+      type: "window"
+    };
+  }
 
-   render() {
-      const { minimized, fileSystem } = this.props;
+  get fileContents() {
+    const { fileSystem, config } = this.props;
+    const { tree } = fileSystem;
+    const { path, name } = config;
+    if (!path) {
+      return null;
+    }
+    let curDir = tree[path.split("/")[0]];
+    for (let dir of path.split("/").slice(1)) {
+      curDir = curDir[dir];
+    }
+    return curDir[name];
+  }
 
-      return (
-         <Window height={400} width={500} minimized={minimized}>
-            <Titlebar
-               onMinimize={() => this.props.minimizeApp('Notepad')}
-               onClose={() => this.props.closeApp('Notepad')}
-            />
-            <Container>
-               <h3>Notepad</h3>
-            </Container>
-         </Window>
-      );
-   }
+  render() {
+    const { minimized, closing, config } = this.props;
+    const { name } = config;
+    const fileContents = this.fileContents;
+
+    return (
+      <Window height={400} width={500} minimized={minimized} closing={closing}>
+        <Titlebar
+          onMinimize={() => this.props.minimizeApp("Notepad")}
+          onClose={() => this.props.closeApp("Notepad")}
+        >
+         <Icon src="/images/Notepad.png" />
+          <Title>{name} - Notepad</Title>
+        </Titlebar>
+        <Container>
+          <Textarea autoFocus defaultValue={fileContents} />
+        </Container>
+      </Window>
+    );
+  }
 }
 
 const mapStateToProps = state => ({
-   fileSystem: state.fileSystem,
+  fileSystem: state.fileSystem
 });
 
 const mapDispatchToProps = dispatch => ({
-   minimizeApp: id => dispatch(minimizeApp(id)),
-   closeApp: id => dispatch(closeApp(id)),
+  minimizeApp: id => dispatch(minimizeApp(id)),
+  closeApp: id => dispatch(closeApp(id))
 });
 
 export default connect(
-   mapStateToProps,
-   mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps
 )(Notepad);

@@ -13,6 +13,9 @@ const Container = styled.div`
 `;
 
 const Contents = styled.div`
+   display: flex;
+   align-items: center;
+   padding: 0 0 0 8px;
    flex: 1;
 `;
 

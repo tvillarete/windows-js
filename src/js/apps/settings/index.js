@@ -21,12 +21,12 @@ class Settings extends Component {
    }
 
    render() {
-      const { settingsState, minimized } = this.props;
+      const { settingsState, closing, minimized } = this.props;
       const { viewStack } = settingsState;
       const view = viewStack[viewStack.length - 1];
 
       return (
-         <Window minimized={minimized}>
+         <Window minimized={minimized} closing={closing}>
             <Titlebar
                absolute
                transparent

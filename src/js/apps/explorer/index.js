@@ -19,6 +19,7 @@ const Sidebar = styled.div`
 
 const FilePane = styled.div`
    display: flex;
+   align-content: flex-start;
    flex-wrap: wrap;
    flex: 1;
 `;
@@ -30,6 +31,7 @@ const IconContainer = styled.div`
    justify-content: space-between;
    height: 6em;
    width: 5em;
+   margin: 4px;
    border: 1px solid transparent;
    box-sizing: border-box;
    cursor: default;
@@ -81,7 +83,6 @@ class Explorer extends Component {
       const { fileSystem } = this.props;
       const { tree } = fileSystem;
       const { curPath } = this.state;
-      let pathContents = {};
 
       let treeLevelContents = tree['C'];
       for (let dir of curPath.split('/')) {
@@ -131,9 +132,9 @@ class Explorer extends Component {
             selected: '',
          }));
       } else if (defaultApps[extension]) {
-         console.log("OPENING FILE");
          this.props.launchApp(defaultApps[extension], {
             name,
+            path: this.state.curPath,
             fileType
          });
       }
@@ -144,12 +145,12 @@ class Explorer extends Component {
    }
 
    render() {
-      const { minimized, fileSystem } = this.props;
+      const { minimized, closing } = this.props;
       const { selected } = this.state;
       const files = this.dirFolders;
 
       return (
-         <Window minimized={minimized}>
+         <Window minimized={minimized} height="500" with="700" closing={closing}>
             <Titlebar
                onMinimize={() => this.props.minimizeApp('Explorer')}
                onClose={() => this.props.closeApp('Explorer')}

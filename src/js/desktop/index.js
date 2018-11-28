@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Taskbar from './taskbar';
+import { init } from '../filesystem/actions';
 import * as apps from '../apps';
 
 const Container = styled.div`
@@ -21,21 +22,27 @@ const AppContainer = styled.div`
 `;
 
 class Desktop extends Component {
+   componentDidMount() {
+      this.props.initFs();
+   }
+
    render() {
       const { desktopState, taskState } = this.props;
       const { background } = desktopState;
-      const { launched, minimized } = taskState;
-      console.log(launched);
+      const { launched, minimized, closing } = taskState;
 
       return (
          <Container background={background}>
             <AppContainer>
                {launched.map((app, index) => {
-                  console.log(app);
+                  const { config } = app;
                   const App = apps[app.id];
+
                   return React.createElement(App, {
                      key: `app-${app.id}-${app.instance}`,
-                     minimized: minimized.includes(app.id)
+                     minimized: minimized.includes(app.id),
+                     closing: closing.includes(app.id),
+                     config 
                   })
                })}
             </AppContainer>
@@ -50,4 +57,8 @@ const mapStateToProps = state => ({
    taskState: state.taskState,
 });
 
-export default connect(mapStateToProps)(Desktop);
+const mapDispatchToProps = dispatch => ({
+   initFs: () => dispatch(init()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Desktop);
